@@ -1,0 +1,10 @@
+parm complex_solv.prmtop
+reference complex_solv.pdb
+trajin complex_solv.pdb
+strip !(:72,94,109,122,136,182,200,330@C,O|:87,100,111,127,151,196,208,332@N,H|:73-86,95-99,110,123-126,137-150,183-195,201-207,331|:1)
+strip :WAT
+strip :Na+
+strip :Cl-
+trajout trunc_cap.pdb
+run
+quit
