@@ -148,7 +148,9 @@ NtermRes=$((res-1))
 
 oldResName=$(awk -v var=$NtermRes '$5 == var {print $4}' trunc_cap.pdb | tail -n 1)
 
-if [ $NtermRes -lt 100 ] ; then
+if [ $NtermRes -lt 10 ] ; then
+sed -i "s/$oldResName     $NtermRes/ACE     $NtermRes/g" trunc_cap.pdb
+elif [ $NtermRes -lt 100 ] ; then
 sed -i "s/$oldResName    $NtermRes/ACE    $NtermRes/g" trunc_cap.pdb
 elif [ $NtermRes -lt 1000 ] ; then
 sed -i "s/$oldResName   $NtermRes/ACE   $NtermRes/g" trunc_cap.pdb
@@ -166,7 +168,9 @@ CtermRes=$((res+1))
 
 oldResName=$(awk -v var=$CtermRes '$5 == var {print $4}' trunc_cap.pdb | tail -n 1)
 
-if [ $CtermRes -lt 100 ] ; then
+if [ $CtermRes -lt 10 ] ; then
+sed -i "s/$oldResName     $CtermRes/NME     $CtermRes/g" trunc_cap.pdb
+elif [ $CtermRes -lt 100 ] ; then
 sed -i "s/$oldResName    $CtermRes/NME    $CtermRes/g" trunc_cap.pdb
 elif [ $CtermRes -lt 1000 ] ; then
 sed -i "s/$oldResName   $CtermRes/NME   $CtermRes/g" trunc_cap.pdb
