@@ -3,13 +3,13 @@
 ### 1) generate crude truncated receptor for residue selection
 # MODIFY: LigandRes should have the residue number of the ligand in the PDB file
 # MODIFY: change the location of the input files (parm, reference and trajin lines)
-LigandRes=1
+LigandRes=200
 
 cat <<eof> trunc.in
-parm complex_solv.prmtop
-reference complex_solv.pdb
-trajin complex_solv.pdb
-strip !(:$LigandRes<:8)
+parm ../complex.pdb
+reference ../complex.pdb
+trajin ../complex.pdb
+strip !(:$LigandRes<:12)
 strip :$LigandRes
 strip :WAT
 strip :Na+
@@ -81,6 +81,9 @@ done
 
 tail -n 1 resNo.txt >> resNo_final.txt
 
+#use final filter to remove single residues
+awk '!($1==$2)'  resNo_final.txt > resNo_final_tmp.txt && mv resNo_final_tmp.txt resNo_final.txt
+
 ## 3.2) create STRIP string for residues within distance threshold
 
 while IFS=" " read -r startRes endRes ; do
@@ -123,9 +126,9 @@ NmeRes=$(echo $NmeRes | sed s/,$// )
 
 # MODIFY: change (paths for) input files
 cat <<eof> trunc_cap.in
-parm complex_solv.prmtop
-reference complex_solv.pdb
-trajin complex_solv.pdb
+parm ../complex.pdb
+reference ../complex.pdb
+trajin ../complex.pdb
 strip !(:$AceRes@C,O|:$NmeRes@N,H|:$Res|:$LigandRes)
 strip :WAT
 strip :Na+
