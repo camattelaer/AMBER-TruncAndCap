@@ -1,0 +1,12 @@
+2024-09-27:
+- added 'debug' boolean (this prevents output files to be removed if set to True)
+- added 'remove_single_residues' boolean (this prevents the removal of single residues if set to False)
+- added variable to pass original pdb file
+- radius to truncate is variable (set at start of script)
+- starts from cleaned pdb (only ATOM or HETATM records)
+- added test if pdb is configured with or withour chainID (this is used for truncating from predefined list ; this is not yet implemented)
+- generation of residue list to retain now possible if chainID is present
+- residue list is checked versus internal cpptraj numbering (this is required for irregular numbering in the original pdb)
+- LigandRes is checked for numeric input or not
+- NtermRes and CtermRes strings are only written if more than one peptide string are required and first residue is not 1 or last residue is not last protein residue, respectively
+- lines_to_patch bugfix if following residue number is smaller than previous residue number

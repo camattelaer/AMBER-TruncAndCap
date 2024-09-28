@@ -1,10 +1,10 @@
 #!/bin/bash
-set -x
-debug="True"
+#set -x
+debug="False"
 ### 1) generate crude truncated receptor for residue selection
 # MODIFY: change the location of the input files (parm, reference and trajin lines)
-LigandRes="1"
-complex_original_pdb="3uo4.pdb"
+LigandRes="X01"
+complex_original_pdb="complex_solv.pdb"
 Radius=12
 remove_single_residues="False"
 regex_numeric='^[0-9]+$'

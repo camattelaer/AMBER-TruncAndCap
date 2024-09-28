@@ -29,6 +29,10 @@ Feel free to reach out if you have trouble running the script.
 
 Everyone is welcomed to branch and/or enhance the script as they feel.
 
+## Versions
+
+See `modifications.txt` for update history
+
 ## Authors
 
 Charles-Alexandre Mattelaer
