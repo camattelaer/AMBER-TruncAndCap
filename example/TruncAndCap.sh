@@ -1,10 +1,10 @@
 #!/bin/bash
-#set -x
-debug="False"
+set -x
+debug="false"
 ### 1) generate crude truncated receptor for residue selection
 # MODIFY: change the location of the input files (parm, reference and trajin lines)
-LigandRes="X01"
-complex_original_pdb="complex_solv.pdb"
+LigandRes="1"
+complex_original_pdb="3uo4.pdb"
 Radius=12
 remove_single_residues="False"
 regex_numeric='^[0-9]+$'
@@ -119,7 +119,12 @@ fi
 
 done
 
+# check if last line has been patched
+last_resNo_diff=$(tail -n 1 resNo_diff.txt | awk '{print $3}')
+
+if [[ $last_resNo_diff > 2 ]] ; then
 tail -n 1 resNo.txt >> resNo_final.txt
+fi
 
 #use final filter to remove single residues
 if [ $remove_single_residues == "True" ] ; then
@@ -149,7 +154,13 @@ for res in $startRes ; do
 
 NtermRes=$((res-1))
 NtermRes=$(awk -v ligandres_awk=$NtermRes '$6==ligandres_awk {print $1}' cpptraj_reslist.txt)
+# do a check for residue name, if startRes is ACE, there is no additional NtermRes to be included
+res_name=$(awk -v res_awk=$res '$6==res_awk {print $2}' cpptraj_reslist.txt)
+if [[ $res_name == "ACE" ]] ; then
+AceRes="$AceRes"
+else
 AceRes="$NtermRes,$AceRes"
+fi
 
 done
 
@@ -163,7 +174,13 @@ for res in $endRes ; do
 
 CtermRes=$((res+1))
 CtermRes=$(awk -v ligandres_awk=$CtermRes '$6==ligandres_awk {print $1}' cpptraj_reslist.txt)
+# do a check for residue name, if endRes is NME, there is no additional CtermRes to be included
+res_name=$(awk -v res_awk=$res '$6==res_awk {print $2}' cpptraj_reslist.txt)
+if [[ $res_name == "NME" ]] ; then
+NmeRes="$NmeRes"
+else
 NmeRes="$CtermRes,$NmeRes"
+fi
 
 done
 
@@ -176,7 +193,7 @@ cat <<eof> trunc_cap.in
 parm $complex_original_pdb
 reference $complex_original_pdb
 trajin $complex_original_pdb
-strip !(:$AceRes@C,O|:$NmeRes@N,H|:$Res|:$LigandResName)
+strip !(:$AceRes@C,O,CA|:$NmeRes@N,H,CA|:$Res|:$LigandResName)
 strip :WAT,HOH
 strip :Na+
 strip :Cl-
@@ -189,9 +206,12 @@ cpptraj -i trunc_cap.in -o trunc_cap.out
 
 ## 3.6) rename Nterm residues to ACE
 
-for res in $startRes ; do
+AceRes_list=$(echo "${AceRes//,/ }")
 
-NtermRes=$((res-1))
+
+for NtermRes in $AceRes_list ; do
+
+#NtermRes=$((res-1))
 
 if [[ -z "${chainID// /}" ]] ; then
 oldResName=$(awk -v var=$NtermRes '$5 == var {print $4}' trunc_cap.pdb | tail -n 1)
@@ -214,9 +234,11 @@ done
 
 ## 3.7) rename Cterm residues to NME
 
-for res in $endRes ; do
+NmeRes_list=$(echo "${NmeRes//,/ }")
 
-CtermRes=$((res+1))
+for CtermRes in $NmeRes_list ; do
+
+#CtermRes=$((res+1))
 
 if [[ -z "${chainID// /}" ]] ; then
 oldResName=$(awk -v var=$CtermRes '$5 == var {print $4}' trunc_cap.pdb | tail -n 1)
@@ -232,6 +254,32 @@ elif [ $CtermRes -lt 1000 ] ; then
 sed -i "s/$oldResName $chainID $CtermRes/NME $chainID $CtermRes/g" trunc_cap.pdb
 else
 sed -i "s/$oldResName ${chainID}$CtermRes/NME ${chainID}$CtermRes/g" trunc_cap.pdb
+fi
+done
+
+### 3.8) rename CA for ACE and NME residues
+
+for res in ${AceRes//,/ } ; do
+if [ $res -lt 10 ] ; then
+sed -i "s/CA  ACE     $res/CH3 ACE     $res/g" trunc_cap.pdb
+elif [ $res -lt 100 ] ; then
+sed -i "s/CA  ACE    $res/CH3 ACE    $res/g" trunc_cap.pdb
+elif [ $res -lt 1000 ] ; then
+sed -i "s/CA  ACE   $res/CH3 ACE   $res/g" trunc_cap.pdb
+else
+sed -i "s/CA  ACE  $res/CH3 ACE  $res/g" trunc_cap.pdb
+fi
+done
+
+for res in ${NmeRes//,/ } ; do
+if [ $res -lt 10 ] ; then
+sed -i "s/CA  NME     $res/C   NME     $res/g" trunc_cap.pdb
+elif [ $res -lt 100 ] ; then
+sed -i "s/CA  NME    $res/C   NME    $res/g" trunc_cap.pdb
+elif [ $res -lt 1000 ] ; then
+sed -i "s/CA  NME   $res/C   NME   $res/g" trunc_cap.pdb
+else
+sed -i "s/CA  NME  $res/C   NME  $res/g" trunc_cap.pdb
 fi
 done
 

@@ -1,3 +1,8 @@
+2024-11-06:
+- problem patched that happened when column 3 of the last line in resNo_diff.txt was bigger than 2
+- patch added to account if ACE or NME residues would be in the original pdb and to be included in truncated protein. (In this case no additional residues are retained at N-term or C-term peptide end.)
+- patch added to include additional C atom of ACE or NME residues (LEaP has tendency to place the missing heavy atom in a weird spot, so retaining the additional carbon prevents this issue.) 
+
 2024-09-27:
 - added 'debug' boolean (this prevents output files to be removed if set to True)
 - added 'remove_single_residues' boolean (this prevents the removal of single residues if set to False)
