@@ -12,6 +12,16 @@ As a prerequisite, the scripts relies on [AmberTools](https://ambermd.org/AmberT
 
 For the rest, the script is only reliant on commands, e.g. `awk` and `sed`, for text processing and manipulation which should be available in (most of the) Linux flavours 
 
+####PYMOL specific
+
+This version of the script requires `pymol`. `pymol` ([free version](https://anaconda.org/conda-forge/pymol-open-source) can easily be installed via `conda`:
+```
+$ conda install -c conda-forge pymol-open-source 
+```
+
+> [!IMPORTANT]  
+> The script currently contains the activation of a specific `conda` environment where I installed `pymol`. Be sure to change this according to how/where you installed `pymol`.
+
 ### Executing program
 
 The script is simply run from the CLI:

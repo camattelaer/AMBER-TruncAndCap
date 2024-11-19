@@ -1,3 +1,6 @@
+2024-11-19:
+The bash script encountered an issue with missing residues. Added a version using pymol (BE SURE TO CHANGE CONDA ENVIRONMENT OR LEAVE IT OUT SO YOUR SCRIPT CAN FIND PYMOL). This does not require residues before and after the residues of interest to create ACE and NME caps. The atom names for ACE and NME residues are altered to match topology in AMBER forcefield libraries.
+
 2024-11-06:
 - problem patched that happened when column 3 of the last line in resNo_diff.txt was bigger than 2
 - patch added to account if ACE or NME residues would be in the original pdb and to be included in truncated protein. (In this case no additional residues are retained at N-term or C-term peptide end.)
