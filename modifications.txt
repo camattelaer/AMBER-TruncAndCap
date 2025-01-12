@@ -1,5 +1,11 @@
+2025-01-12:
+I added a version which is almost entirely reliant on PyMol (TruncAndCap_pymol2.sh). This script requires a lot less intermediary files. Methyl atoms still have to be renamed. For people proficient in python, this might be an interesting start to integrate in your own workflow.
+
 2024-11-19:
-The bash script encountered an issue with missing residues. Added a version using pymol (BE SURE TO CHANGE CONDA ENVIRONMENT OR LEAVE IT OUT SO YOUR SCRIPT CAN FIND PYMOL). This does not require residues before and after the residues of interest to create ACE and NME caps. The atom names for ACE and NME residues are altered to match topology in AMBER forcefield libraries.
+The bash script encountered an issue with missing residues. 
+Added a version using pymol (BE SURE TO CHANGE CONDA ENVIRONMENT OR LEAVE IT OUT SO YOUR SCRIPT CAN FIND PYMOL). 
+This does not require residues before and after the residues of interest to create ACE and NME caps.
+The atom names for ACE and NME residues are altered to match topology in AMBER forcefield libraries.
 
 2024-11-06:
 - problem patched that happened when column 3 of the last line in resNo_diff.txt was bigger than 2

@@ -12,7 +12,7 @@ As a prerequisite, the scripts relies on [AmberTools](https://ambermd.org/AmberT
 
 For the rest, the script is only reliant on commands, e.g. `awk` and `sed`, for text processing and manipulation which should be available in (most of the) Linux flavours 
 
-####PYMOL specific
+###PYMOL specific
 
 This version of the script requires `pymol`. `pymol` ([free version](https://anaconda.org/conda-forge/pymol-open-source) can easily be installed via `conda`:
 ```
